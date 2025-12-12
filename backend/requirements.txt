@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+python-socketio
+langchain
+langchain-community
+langchain-openai
+google-generativeai
+chromadb
+python-multipart
+requests
