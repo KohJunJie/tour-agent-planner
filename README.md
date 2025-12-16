@@ -4,6 +4,169 @@ An AI-powered travel itinerary planning system that enables users to interact wi
 
 ---
 
+## Getting Started
+
+### Prerequisites
+
+Before running the application, ensure you have the following installed on your system:
+
+#### System Requirements
+
+- **Node.js**: Version 20.0.0 or higher
+- **Python**: Version 3.8 or higher
+- **npm** or **yarn**: For managing frontend dependencies
+- **pip**: For managing Python dependencies
+
+#### API Keys (Required for LLM Integration)
+
+You'll need API keys from one or more of the following providers:
+
+- **OpenAI API Key**: For GPT models
+- **Google Generative AI API Key**: For Gemini models
+
+### Installation
+
+#### 1. Clone the Repository
+
+```bash
+git clone https://github.com/KohJunJie/tour-agent-planner.git
+cd tour-agent-planner
+```
+
+#### 2. Backend Setup
+
+Navigate to the backend directory and install Python dependencies:
+
+```bash
+cd backend
+pip install -r requirements.txt
+```
+
+**Backend Dependencies:**
+
+- `fastapi` - Modern web framework for building APIs
+- `uvicorn` - ASGI server for running FastAPI
+- `python-socketio` - WebSocket support for real-time communication
+- `langchain` - LLM orchestration framework
+- `langchain-community` - Community integrations for LangChain
+- `langchain-openai` - OpenAI integration for LangChain
+- `google-generativeai` - Google Gemini AI integration
+- `chromadb` - Vector database for agent memory
+- `python-multipart` - File upload support
+- `requests` - HTTP library for API calls
+
+**Environment Configuration:**
+
+Create a `.env` file in the `backend` directory with your API keys:
+
+```bash
+OPENAI_API_KEY=your_openai_api_key_here
+GOOGLE_API_KEY=your_google_api_key_here
+```
+
+#### 3. Frontend Setup
+
+Navigate to the frontend directory and install Node.js dependencies:
+
+```bash
+cd ../frontend
+npm install
+```
+
+**Frontend Dependencies:**
+
+- `react` (19.2.0) - UI library
+- `react-dom` (19.2.0) - React DOM rendering
+- `typescript` (~5.9.3) - Type safety
+- `vite` (7.2.4) - Build tool and dev server
+- `socket.io-client` (4.8.1) - WebSocket client
+- `react-speech-recognition` (4.0.1) - Speech-to-text functionality
+- `regenerator-runtime` (0.14.1) - Async/await support for speech recognition
+- `lucide-react` (0.561.0) - Icon library
+
+**Development Dependencies:**
+
+- `@vitejs/plugin-react` - Vite React plugin
+- `eslint` - Code linting
+- `typescript-eslint` - TypeScript linting rules
+
+### Running the Application
+
+#### Start the Backend Server
+
+From the `backend` directory:
+
+```bash
+python main.py
+```
+
+The backend server will start on `http://localhost:8000`
+
+**Available Endpoints:**
+
+- `GET /` - Root endpoint (health check)
+- `GET /health` - Health status endpoint
+- WebSocket connection on `ws://localhost:8000`
+
+#### Start the Frontend Development Server
+
+From the `frontend` directory:
+
+```bash
+npm run dev
+```
+
+The frontend will start on `http://localhost:5173`
+
+### Verify Installation
+
+1. **Backend Health Check:**
+
+   ```bash
+   curl http://localhost:8000/health
+   ```
+
+   Expected response: `{"status": "ok"}`
+
+2. **Frontend Access:**
+   Open your browser and navigate to `http://localhost:5173`
+
+3. **WebSocket Connection:**
+   The frontend should automatically connect to the backend via Socket.IO. Check the browser console for "Connected to backend" message.
+
+### Browser Compatibility
+
+For speech recognition features, use a modern browser with Web Speech API support:
+
+- **Chrome** (recommended)
+- **Edge**
+- **Safari** (limited support)
+- **Firefox** (requires configuration)
+
+### Troubleshooting
+
+**Backend Issues:**
+
+- Ensure Python 3.8+ is installed: `python --version`
+- Verify all dependencies are installed: `pip list`
+- Check that API keys are correctly set in `.env`
+- Confirm port 8000 is not already in use
+
+**Frontend Issues:**
+
+- Ensure Node.js 20+ is installed: `node --version`
+- Clear node_modules and reinstall: `rm -rf node_modules && npm install`
+- Check that port 5173 is not already in use
+- Verify backend is running before starting frontend
+
+**WebSocket Connection Issues:**
+
+- Ensure CORS is properly configured in backend
+- Check browser console for connection errors
+- Verify firewall is not blocking WebSocket connections
+
+---
+
 ## System Architecture Overview
 
 ### High-Level Architecture
