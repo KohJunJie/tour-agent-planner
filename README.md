@@ -51,9 +51,11 @@ pip install -r requirements.txt
 - `langchain-community` - Community integrations for LangChain
 - `langchain-openai` - OpenAI integration for LangChain
 - `google-generativeai` - Google Gemini AI integration
-- `chromadb` - Vector database for agent memory
+- `chromadb` - Vector database for agent memory (embedded, no separate installation needed)
 - `python-multipart` - File upload support
 - `requests` - HTTP library for API calls
+
+**Note on ChromaDB:** ChromaDB is installed via pip and runs as an embedded database within your Python application. No separate database server installation is required. It will automatically create a `chroma_db` directory in your backend folder to persist data locally.
 
 **Environment Configuration:**
 
