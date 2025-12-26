@@ -56,6 +56,12 @@ class Backend:
     # task dependencies, and task callbacks, check out the documentation:
     # https://docs.crewai.com/concepts/tasks#overview-of-a-task
     @task
+    def analyze_requirements_task(self) -> Task:
+        return Task(
+            config=self.tasks_config["analyze_requirements_task"],  # type: ignore[index]
+        )
+
+    @task
     def retrieve_flights_task(self) -> Task:
         return Task(
             config=self.tasks_config["retrieve_flights_task"],  # type: ignore[index]

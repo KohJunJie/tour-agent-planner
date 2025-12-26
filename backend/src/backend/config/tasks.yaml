@@ -1,9 +1,32 @@
+analyze_requirements_task:
+  description: >
+    Analyze the user's travel planning requirements and prepare necessary information.
+    If no destination is provided, select a random popular destination from:
+    Paris, Tokyo, New York, London, Barcelona, Dubai, Singapore, Rome, Sydney, or Bangkok.
+    If no origin is provided, use a major hub like 'New York' or 'Los Angeles'.
+    If no dates are provided, suggest dates 30-60 days from now for a 5-7 day trip.
+    Determine which services are needed based on the inputs:
+    - needs_flights: {needs_flights}
+    - needs_hotels: {needs_hotels}
+    - needs_itinerary: {needs_itinerary}
+    Generate missing information and provide a clear plan for what will be searched.
+  expected_output: >
+    A detailed travel planning summary including:
+    - Origin and destination (generated if not provided)
+    - Travel dates (generated if not provided)
+    - Services requested (flights, hotels, itinerary)
+    - User preferences and budget
+    Format as: "Planning trip from [ORIGIN] to [DESTINATION] from [START] to [END]. Services: [LIST]"
+  agent: manager
+
 retrieve_flights_task:
   description: >
-    Search and retrieve the best flight options for the user's trip from {origin} to {destination}
-    on {departure_date} and returning on {return_date}.
+    Search and retrieve the best flight options for the user's trip.
+    Use the origin, destination, and dates from the previous analysis.
+    If needs_flights is False, skip this task.
     Consider factors such as price, duration, number of stops, airline preferences, and departure times.
     Make sure to find multiple options to give the user choices.
+    Use the Flight Search Tool to find available flights.
   expected_output: >
     A detailed list of flight options including:
     - Airline and flight numbers
@@ -12,14 +35,18 @@ retrieve_flights_task:
     - Price in USD
     - Booking class and amenities
     Formatted with at least 3-5 flight options ranked by best value.
+    If flights are not needed, return: "Flight search skipped per user request."
   agent: flight_retriever
+  context:
+    - analyze_requirements_task
 
 find_hotels_task:
   description: >
-    Find and recommend the best hotel options near {destination} for the travel dates
-    from {check_in_date} to {check_out_date}.
+    Find and recommend the best hotel options at the destination from the previous analysis.
+    If needs_hotels is False, skip this task.
     Consider user preferences for budget, location, amenities (WiFi, breakfast, parking, pool, gym),
     and guest ratings. Focus on hotels that are well-located for the planned activities.
+    Use the Hotel Search Tool to find available hotels.
   expected_output: >
     A comprehensive list of hotel recommendations including:
     - Hotel name and star rating
@@ -28,13 +55,16 @@ find_hotels_task:
     - Key amenities and features
     - Guest ratings and reviews summary
     Provide at least 3-5 options with varying price points.
+    If hotels are not needed, return: "Hotel search skipped per user request."
   agent: hotel_finder
+  context:
+    - analyze_requirements_task
 
 plan_itinerary_task:
   description: >
-    Create a detailed day-by-day travel itinerary for the trip to {destination}
-    from {start_date} to {end_date}.
-    Include activities, attractions, restaurants, and local experiences based on user interests.
+    Create a detailed day-by-day travel itinerary for the destination from the previous analysis.
+    If needs_itinerary is False, skip this task.
+    Include activities, attractions, restaurants, and local experiences based on user interests: {interests}.
     Consider travel time between locations, opening hours, and optimal visit times.
     Balance busy days with relaxation time.
   expected_output: >
@@ -46,21 +76,31 @@ plan_itinerary_task:
     - Estimated costs for activities
     - Tips and local insights
     Formatted as a clear, easy-to-follow schedule for each day.
+    If itinerary is not needed, return: "Itinerary planning skipped per user request."
   agent: itinerary_planner
+  context:
+    - analyze_requirements_task
 
 manage_trip_task:
   description: >
     Coordinate and oversee the complete travel planning process.
-    Review the flight options, hotel recommendations, and itinerary plans.
-    Ensure all components work together cohesively and meet the user's requirements.
-    Identify any gaps or conflicts in the plan and provide final recommendations.
+    Review all completed tasks (flights, hotels, itinerary) based on what was requested.
+    Compile the results from the agents and ensure all components work together cohesively.
+    If any service was skipped, acknowledge that in the summary.
+    Provide final recommendations based on what was searched.
   expected_output: >
     A comprehensive travel plan summary including:
-    - Best recommended flight option with reasoning
-    - Top hotel recommendation with justification
-    - Refined day-by-day itinerary
+    - Trip overview (destination, dates, origin)
+    - Flight recommendations (if searched) with best option highlighted
+    - Hotel recommendations (if searched) with top pick highlighted
+    - Day-by-day itinerary (if requested)
     - Total estimated budget breakdown
     - Important travel tips and reminders
     - Booking priorities and next steps
     Formatted as a complete, actionable travel plan ready for user review.
   agent: manager
+  context:
+    - analyze_requirements_task
+    - retrieve_flights_task
+    - find_hotels_task
+    - plan_itinerary_task
