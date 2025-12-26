@@ -45,3 +45,5 @@ manager:
     are seamlessly integrated. Your leadership skills and attention to detail
     ensure that clients receive top-notch service and well-organized travel
     plans.
+  allow_delegation: true
+  verbose: true
