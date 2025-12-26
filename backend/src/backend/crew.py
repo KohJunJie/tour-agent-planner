@@ -2,6 +2,7 @@ from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
+import os
 from backend.tools import FlightSearchTool, HotelSearchTool
 
 # If you want to run a snippet of code before or after the crew starts,
@@ -97,4 +98,5 @@ class Backend:
             process=Process.hierarchical,
             verbose=True,
             # process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
+            planning=True,
         )
