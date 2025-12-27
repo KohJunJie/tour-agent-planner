@@ -98,7 +98,7 @@ manage_trip_task:
     - Important travel tips and reminders
     - Booking priorities and next steps
     Formatted as a complete, actionable travel plan ready for user review.
-  agent: manager
+  # agent: manager
   context:
     - analyze_requirements_task
     - retrieve_flights_task

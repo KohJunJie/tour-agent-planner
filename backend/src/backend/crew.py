@@ -47,7 +47,6 @@ class Backend:
             verbose=True,
         )
 
-    @agent
     def manager(self) -> Agent:
         return Agent(
             config=self.agents_config["manager"], verbose=True  # type: ignore[index]
@@ -99,4 +98,5 @@ class Backend:
             verbose=True,
             # process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
             planning=True,
+            manager_agent=self.manager(),
         )
