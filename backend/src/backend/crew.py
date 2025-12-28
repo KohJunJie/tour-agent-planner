@@ -3,6 +3,8 @@ from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
 import os
+from crewai_tools import MCPServerAdapter
+from mcp import StdioServerParameters
 from backend.tools import FlightSearchTool, HotelSearchTool
 from backend.models import FlightOutput, HotelOutput, ItineraryOutput
 
@@ -35,9 +37,17 @@ class Backend:
 
     @agent
     def hotel_finder(self) -> Agent:
+        google_maps_mcp = MCPServerAdapter(
+            serverparams=StdioServerParameters(
+                command="npx",
+                args=["-y", "@modelcontextprotocol/server-google-maps"],
+                env={"GOOGLE_MAPS_API_KEY": os.environ.get("GOOGLE_MAPS_API_KEY", "")},
+            )
+        )
+
         return Agent(
             config=self.agents_config["hotel_finder"],  # type: ignore[index]
-            tools=[HotelSearchTool()],
+            tools=[HotelSearchTool(), google_maps_mcp],
             verbose=True,
         )
 
