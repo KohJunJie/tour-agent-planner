@@ -1,24 +1,3 @@
-analyze_requirements_task:
-  description: >
-    Analyze the user's travel planning requirements and prepare necessary information.
-    If no destination is provided, select a random popular destination from:
-    Paris, Tokyo, New York, London, Barcelona, Dubai, Singapore, Rome, Sydney, or Bangkok.
-    If no origin is provided, use a major hub like 'New York' or 'Los Angeles'.
-    If no dates are provided, suggest dates 30-60 days from now for a 5-7 day trip.
-    Determine which services are needed based on the inputs:
-    - needs_flights: {needs_flights}
-    - needs_hotels: {needs_hotels}
-    - needs_itinerary: {needs_itinerary}
-    Generate missing information and provide a clear plan for what will be searched.
-  expected_output: >
-    A detailed travel planning summary including:
-    - Origin and destination (generated if not provided)
-    - Travel dates (generated if not provided)
-    - Services requested (flights, hotels, itinerary)
-    - User preferences and budget
-    Format as: "Planning trip from [ORIGIN] to [DESTINATION] from [START] to [END]. Services: [LIST]"
-  agent: manager
-
 retrieve_flights_task:
   description: >
     Search and retrieve the best flight options for the user's trip.
@@ -37,8 +16,6 @@ retrieve_flights_task:
     Formatted with at least 3-5 flight options ranked by best value.
     If flights are not needed, return: "Flight search skipped per user request."
   agent: flight_retriever
-  context:
-    - analyze_requirements_task
 
 find_hotels_task:
   description: >
@@ -57,8 +34,6 @@ find_hotels_task:
     Provide at least 3-5 options with varying price points.
     If hotels are not needed, return: "Hotel search skipped per user request."
   agent: hotel_finder
-  context:
-    - analyze_requirements_task
 
 plan_itinerary_task:
   description: >
@@ -78,29 +53,3 @@ plan_itinerary_task:
     Formatted as a clear, easy-to-follow schedule for each day.
     If itinerary is not needed, return: "Itinerary planning skipped per user request."
   agent: itinerary_planner
-  context:
-    - analyze_requirements_task
-
-manage_trip_task:
-  description: >
-    Coordinate and oversee the complete travel planning process.
-    Review all completed tasks (flights, hotels, itinerary) based on what was requested.
-    Compile the results from the agents and ensure all components work together cohesively.
-    If any service was skipped, acknowledge that in the summary.
-    Provide final recommendations based on what was searched.
-  expected_output: >
-    A comprehensive travel plan summary including:
-    - Trip overview (destination, dates, origin)
-    - Flight recommendations (if searched) with best option highlighted
-    - Hotel recommendations (if searched) with top pick highlighted
-    - Day-by-day itinerary (if requested)
-    - Total estimated budget breakdown
-    - Important travel tips and reminders
-    - Booking priorities and next steps
-    Formatted as a complete, actionable travel plan ready for user review.
-  # agent: manager
-  context:
-    - analyze_requirements_task
-    - retrieve_flights_task
-    - find_hotels_task
-    - plan_itinerary_task

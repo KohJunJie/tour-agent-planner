@@ -72,7 +72,19 @@ def test():
     """
     Test the crew execution and returns the results.
     """
-    inputs = {"topic": "AI LLMs", "current_year": str(datetime.now().year)}
+    inputs = {
+        "origin": "JFK",
+        "destination": "London",
+        "departure_date": "2025-06-15",
+        "return_date": "2025-06-22",
+        "check_in_date": "2025-06-15",
+        "check_out_date": "2025-06-22",
+        "needs_flights": True,
+        "needs_hotels": True,
+        "needs_itinerary": True,
+        "budget": "mid-range",
+        "interests": "history, museums, pubs",
+    }
 
     try:
         Backend().crew().test(

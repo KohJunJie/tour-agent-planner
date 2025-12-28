@@ -47,19 +47,9 @@ class Backend:
             verbose=True,
         )
 
-    def manager(self) -> Agent:
-        return Agent(
-            config=self.agents_config["manager"], verbose=True  # type: ignore[index]
-        )
-
     # To learn more about structured task outputs,
     # task dependencies, and task callbacks, check out the documentation:
     # https://docs.crewai.com/concepts/tasks#overview-of-a-task
-    @task
-    def analyze_requirements_task(self) -> Task:
-        return Task(
-            config=self.tasks_config["analyze_requirements_task"],  # type: ignore[index]
-        )
 
     @task
     def retrieve_flights_task(self) -> Task:
@@ -79,11 +69,8 @@ class Backend:
             config=self.tasks_config["plan_itinerary_task"],  # type: ignore[index]
         )
 
-    @task
-    def manage_trip_task(self) -> Task:
-        return Task(
-            config=self.tasks_config["manage_trip_task"],  # type: ignore[index]
-        )
+    def travel_manager(self) -> Agent:
+        return Agent(config=self.agents_config["manager"], verbose=True)  # type: ignore[index]
 
     @crew
     def crew(self) -> Crew:
@@ -95,8 +82,7 @@ class Backend:
             agents=self.agents,  # Automatically created by the @agent decorator
             tasks=self.tasks,  # Automatically created by the @task decorator
             process=Process.hierarchical,
+            manager_agent=self.travel_manager(),
             verbose=True,
             # process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
-            planning=True,
-            manager_agent=self.manager(),
         )
