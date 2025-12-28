@@ -56,21 +56,21 @@ class Backend:
     def retrieve_flights_task(self) -> Task:
         return Task(
             config=self.tasks_config["retrieve_flights_task"],  # type: ignore[index]
-            output_pydantic=FlightOutput
+            output_pydantic=FlightOutput,
         )
 
     @task
     def find_hotels_task(self) -> Task:
         return Task(
             config=self.tasks_config["find_hotels_task"],  # type: ignore[index]
-            output_pydantic=HotelOutput
+            output_pydantic=HotelOutput,
         )
 
     @task
     def plan_itinerary_task(self) -> Task:
         return Task(
             config=self.tasks_config["plan_itinerary_task"],  # type: ignore[index]
-            output_pydantic=ItineraryOutput
+            output_pydantic=ItineraryOutput,
         )
 
     def travel_manager(self) -> Agent:

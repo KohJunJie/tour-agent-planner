@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator, ValidationInfo
 from datetime import datetime, date
 from typing import Optional
 
@@ -26,8 +26,9 @@ class TravelInput(BaseModel):
     budget: str = Field("any", description="Budget preference")
     interests: Optional[str] = Field(None, description="User interests")
 
-    @validator("departure_date", "return_date", "check_in_date", "check_out_date")
-    def validate_dates(cls, v):
+    @field_validator("departure_date", "return_date", "check_in_date", "check_out_date")
+    @classmethod
+    def validate_dates(cls, v: Optional[str]) -> Optional[str]:
         if not v:
             return v
         try:
@@ -38,12 +39,15 @@ class TravelInput(BaseModel):
         except ValueError:
             raise ValueError("Incorrect date format, should be YYYY-MM-DD")
 
-    @validator("return_date")
-    def validate_return_date(cls, v, values):
-        if not v or not values.get("departure_date"):
+    @field_validator("return_date")
+    @classmethod
+    def validate_return_date(
+        cls, v: Optional[str], info: ValidationInfo
+    ) -> Optional[str]:
+        if not v or not info.data.get("departure_date"):
             return v
 
-        dep_date = datetime.strptime(values["departure_date"], "%Y-%m-%d").date()
+        dep_date = datetime.strptime(info.data["departure_date"], "%Y-%m-%d").date()
         ret_date = datetime.strptime(v, "%Y-%m-%d").date()
 
         if ret_date < dep_date:
@@ -58,6 +62,6 @@ def validate_input(inputs: dict) -> dict:
     """
     try:
         model = TravelInput(**inputs)
-        return model.dict()
+        return model.model_dump()
     except Exception as e:
         raise ValueError(f"Input validation failed: {e}")
