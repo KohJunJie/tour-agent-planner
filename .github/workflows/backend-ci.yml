@@ -38,4 +38,4 @@ jobs:
 
       - name: Run tests with pytest
         run: |
-          pytest tests/ -v -m "not requires_openai"
+          pytest tests/ -v -m "not requires_apikey"
