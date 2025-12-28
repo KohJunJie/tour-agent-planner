@@ -20,6 +20,7 @@ class TestPerformance:
             mock_crew.return_value = MagicMock()
             return Backend()
 
+    @pytest.mark.requires_openai
     def test_agent_initialization_speed(self, crew_instance):
         """
         Ensure agents are initialized quickly.

@@ -29,3 +29,8 @@ build-backend = "hatchling.build"
 
 [tool.crewai]
 type = "crew"
+
+[tool.pytest.ini_options]
+markers = [
+    "requires_openai: marks tests as requiring openai api key (deselect with '-m \"not requires_openai\"')",
+]

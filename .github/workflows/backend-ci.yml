@@ -35,4 +35,4 @@ jobs:
 
       - name: Run tests with pytest
         run: |
-          pytest tests/ -v
+          pytest tests/ -v -m "not requires_openai"
