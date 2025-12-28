@@ -1,7 +1,7 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
-from typing import List
+from typing import List, Any
 import os
 from crewai_tools import MCPServerAdapter
 from mcp import StdioServerParameters
@@ -37,17 +37,25 @@ class Backend:
 
     @agent
     def hotel_finder(self) -> Agent:
-        google_maps_mcp = MCPServerAdapter(
-            serverparams=StdioServerParameters(
-                command="npx",
-                args=["-y", "@modelcontextprotocol/server-google-maps"],
-                env={"GOOGLE_MAPS_API_KEY": os.environ.get("GOOGLE_MAPS_API_KEY", "")},
+        tools: List[Any] = [HotelSearchTool()]
+        try:
+            google_maps_mcp = MCPServerAdapter(
+                serverparams=StdioServerParameters(
+                    command="npx",
+                    args=["-y", "@modelcontextprotocol/server-google-maps"],
+                    env={
+                        "GOOGLE_MAPS_API_KEY": os.environ.get("GOOGLE_MAPS_API_KEY", "")
+                    },
+                )
             )
-        )
+            tools.append(google_maps_mcp)
+        except Exception as e:
+            print(f"Warning: Failed to initialize Google Maps MCP: {e}")
+            print("Falling back to mock HotelSearchTool only.")
 
         return Agent(
             config=self.agents_config["hotel_finder"],  # type: ignore[index]
-            tools=[HotelSearchTool(), google_maps_mcp],
+            tools=tools,
             verbose=True,
         )
 

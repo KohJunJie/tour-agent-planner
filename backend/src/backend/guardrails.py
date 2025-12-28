@@ -1,6 +1,7 @@
-from pydantic import BaseModel, Field, field_validator, ValidationInfo
+from pydantic import BaseModel, Field, field_validator, ValidationInfo, ValidationError
 from datetime import datetime, date
-from typing import Optional
+from typing import Optional, Any, Dict
+from backend.models import ItineraryOutput
 
 
 class TravelInput(BaseModel):
@@ -64,5 +65,37 @@ def validate_input(inputs: dict) -> dict:
     try:
         model = TravelInput(**inputs)
         return model.model_dump()
+    except ValidationError as e:
+        raise ValueError(f"Input validation failed: {e}")
+
+
+def validate_output(output: Any) -> Dict:
+    """
+    Validates the output from the crew.
+    Ensures it matches the ItineraryOutput schema.
+    """
+    try:
+        # If output is already a Pydantic model, dump it
+        if isinstance(output, ItineraryOutput):
+            return output.model_dump()
+
+        # If output is a CrewOutput object (from crew.kickoff), it might have a 'pydantic' attribute
+        if hasattr(output, "pydantic") and output.pydantic:
+            if isinstance(output.pydantic, ItineraryOutput):
+                return output.pydantic.model_dump()
+
+        # If output is a dict, validate it
+        if isinstance(output, dict):
+            model = ItineraryOutput(**output)
+            return model.model_dump()
+
+        # If output is a raw string (JSON), try to parse it?
+        # Usually CrewAI returns a CrewOutput object.
+        # If the last task had output_pydantic, output.pydantic should be set.
+
+        raise ValueError(f"Output format not recognized or invalid: {type(output)}")
+
+    except ValidationError as e:
+        raise ValueError(f"Output validation failed: {e}")
     except Exception as e:
         raise ValueError(f"Input validation failed: {e}")

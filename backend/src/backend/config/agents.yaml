@@ -9,6 +9,8 @@ flight_retriever:
     as budget, travel dates, and airline choices. Your attention to detail
     ensures that users receive accurate and comprehensive flight information.
   allow_delegation: false
+  max_rpm: 10
+  max_iter: 3
 
 hotel_finder:
   role: >
@@ -22,6 +24,8 @@ hotel_finder:
     expertise ensures that users receive tailored hotel recommendations that
     enhance their travel experience.
   allow_delegation: false
+  max_rpm: 10
+  max_iter: 3
 
 itinerary_planner:
   role: >
@@ -35,6 +39,8 @@ itinerary_planner:
     itineraries. Your creativity and organizational skills ensure that every
     itinerary is well-structured and tailored to the user's desires.
   allow_delegation: false
+  max_rpm: 10
+  max_iter: 5
 
 manager:
   role: >
