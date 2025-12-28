@@ -46,9 +46,39 @@ class FlightSearchTool(BaseTool):
             "Southwest Airlines",
             "JetBlue Airways",
             "Alaska Airlines",
+            "Singapore Airlines",
+            "Japan Airlines",
+            "All Nippon Airways",
+            "Emirates",
+            "Qatar Airways",
+            "Lufthansa",
+            "British Airways",
+            "Air France",
+            "KLM Royal Dutch Airlines",
+            "Cathay Pacific",
+            "Qantas",
+            "Turkish Airlines",
+            "Air Canada",
+            "Etihad Airways",
+            "Scoot",
+            "Jetstar Airways",
+            "Peach Aviation",
+            "T-way Air",
+            "Jeju Air",
+            "AirAsia",
+            "Zipair",
         ]
 
-        aircraft = ["Boeing 737", "Airbus A320", "Boeing 787", "Airbus A350"]
+        aircraft = [
+            "Boeing 737",
+            "Airbus A320",
+            "Boeing 787",
+            "Airbus A350",
+            "Airbus A380",
+            "Airbus A340",
+            "Airbus A330",
+            "Boeing 747",
+        ]
 
         # Generate 5 outbound flight options
         flights = []
