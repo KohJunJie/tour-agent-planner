@@ -33,11 +33,12 @@ class TravelInput(BaseModel):
             return v
         try:
             d = datetime.strptime(v, "%Y-%m-%d").date()
-            if d < date.today():
-                raise ValueError("Date cannot be in the past")
-            return v
         except ValueError:
             raise ValueError("Incorrect date format, should be YYYY-MM-DD")
+
+        if d < date.today():
+            raise ValueError("Date cannot be in the past")
+        return v
 
     @field_validator("return_date")
     @classmethod
