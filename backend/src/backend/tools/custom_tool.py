@@ -15,5 +15,11 @@ class MyCustomTool(BaseTool):
     args_schema: Type[BaseModel] = MyCustomToolInput
 
     def _run(self, argument: str) -> str:
+        # Tool Guardrail: Validate input length and content
+        if len(argument) > 100:
+            return "Error: Argument too long. Please provide a shorter argument."
+        if "forbidden_keyword" in argument:
+            return "Error: Forbidden keyword detected."
+
         # Implementation goes here
         return "this is an example of a tool output, ignore it and move along."

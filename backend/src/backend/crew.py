@@ -4,6 +4,7 @@ from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
 import os
 from backend.tools import FlightSearchTool, HotelSearchTool
+from backend.models import FlightOutput, HotelOutput, ItineraryOutput
 
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
@@ -55,18 +56,21 @@ class Backend:
     def retrieve_flights_task(self) -> Task:
         return Task(
             config=self.tasks_config["retrieve_flights_task"],  # type: ignore[index]
+            output_pydantic=FlightOutput
         )
 
     @task
     def find_hotels_task(self) -> Task:
         return Task(
             config=self.tasks_config["find_hotels_task"],  # type: ignore[index]
+            output_pydantic=HotelOutput
         )
 
     @task
     def plan_itinerary_task(self) -> Task:
         return Task(
             config=self.tasks_config["plan_itinerary_task"],  # type: ignore[index]
+            output_pydantic=ItineraryOutput
         )
 
     def travel_manager(self) -> Agent:

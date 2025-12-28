@@ -5,6 +5,7 @@ import warnings
 from datetime import datetime
 
 from backend.crew import Backend
+from backend.guardrails import validate_input
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
@@ -38,7 +39,8 @@ def run():
     }
 
     try:
-        Backend().crew().kickoff(inputs=inputs)
+        validated_inputs = validate_input(inputs)
+        Backend().crew().kickoff(inputs=validated_inputs)
     except Exception as e:
         raise Exception(f"An error occurred while running the crew: {e}")
 
